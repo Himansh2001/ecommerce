@@ -8,6 +8,8 @@ const authRoute=require("./routes/auth")
 const productRoute=require("./routes/product")
 const CartRoute=require("./routes/cart")
 const OrderRoute=require("./routes/order")
+const cors=require("cors") ;
+app.use(cors()) ;
 app.use(express.json()) ;
 
 

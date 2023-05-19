@@ -4,6 +4,7 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import { Add, Remove } from "@material-ui/icons";
+import { useSelector } from "react-redux";
 const Container = styled.div``;
 const Wrapper = styled.div`
   padding: 20px;
@@ -64,9 +65,10 @@ const ProductColor = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #${(props) => props.color};
-  cursor: pointer;
+  background-color: ${(props) => props.color};
 `;
+
+
 const ProductSize = styled.span``;
 const PriceDetail = styled.div`
   flex: 1;
@@ -123,6 +125,7 @@ const Button = styled.button`
 ` ;
 
 const Cart = () => {
+    const cart = useSelector(state=>state.cart)
   return (
     <Container>
       <Navbar />
@@ -139,63 +142,39 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
+           {cart.products.map(product=>(
+              <Product>
               <ProductDetail>
-                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
+                <Image src={product.img} />
                 <Details>
                   <ProductName>
-                    <b>product:</b>Jessie thunder shoes
+                    <b>product:</b>{product.title}
                   </ProductName>
                   <ProductId>
-                    <b>Id:</b>12345678901
+                    <b>Id:</b>{product._id}
                   </ProductId>
-                  <ProductColor color="000000" />
+                  <ProductColor color={product.color} />
                   <ProductSize>
-                    <b>Size:</b>37.5
+                    <b>Size:</b>{product.size}
                   </ProductSize>
                 </Details>
               </ProductDetail>
               <PriceDetail>
                 <ProductAmountContainer>
                   <Add />
-                  <ProductAmount>2</ProductAmount>
+                  <ProductAmount>{product.quantity}</ProductAmount>
                   <Remove />
                 </ProductAmountContainer>
-                <ProductPrice>$30</ProductPrice>
+                <ProductPrice>${product.price*product.quantity}</ProductPrice>
               </PriceDetail>
             </Product>
-            <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
-                <Details>
-                  <ProductName>
-                    <b>product:</b>Jessie thunder shoes
-                  </ProductName>
-                  <ProductId>
-                    <b>Id:</b>12345678901
-                  </ProductId>
-                  <ProductColor color="000000" />
-                  <ProductSize>
-                    <b>Size:</b>37.5
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>2</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$30</ProductPrice>
-              </PriceDetail>
-            </Product>
+            ))}
           </Info>
           <Summary>
             <SummaryTitle>Order Summary</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>SubTotal</SummaryItemText>
-              <SummaryItemPrice>$80</SummaryItemPrice>
+              <SummaryItemPrice>{cart.total}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated Shipping</SummaryItemText>
@@ -207,7 +186,7 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
             <Button>CHECKOUT NOW</Button>
           </Summary>
